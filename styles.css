@@ -1,0 +1,164 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+}
+
+.board-container {
+    display: grid;
+    grid-template-rows: 50px repeat(6, 100px);
+    grid-template-columns: 50px repeat(5, 100px);
+    gap: 5px;
+    background-color: #333;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.column-labels {
+    display: flex;
+    position: absolute;
+    top: 10px;
+    left: 60px;
+}
+
+.column-label {
+    width: 100px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.row-labels {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 10px;
+}
+
+.row-label {
+    width: 50px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.board {
+    grid-row: 2 / span 6;
+    grid-column: 2 / span 5;
+    display: grid;
+    grid-template-rows: repeat(6, 100px);
+    grid-template-columns: repeat(5, 100px);
+    gap: 5px;
+    position: relative;
+    z-index: 1;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cell:hover {
+    background-color: #ddd;
+}
+
+.pieces {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.piece {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    cursor: grab;
+    user-select: none;
+}
+
+.piece.player1 {
+    background-color: blue;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.piece.player2 {
+    background-color: red;
+    border-radius: 50%;
+}
+
+.piece.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+#resetButton, #startGameButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#resetButton:hover, #startGameButton:hover {
+    background-color: #555;
+}
+
+.player-turn {
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    border-radius: 5px;
+}
+
+.player-turn.player1 {
+    background-color: blue;
+}
+
+.player-turn.player2 {
+    background-color: red;
+}
+
+#statusMessage {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    color: red;
+}
