@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerTurnIndicator = document.getElementById('playerTurnIndicator');
     const statusMessage = document.getElementById('statusMessage');
     let currentPlayer = 1; // 1 or 2
-    let draggedPiece = null;
+    let selectedPiece = null;
     let isInitialSetup = true; // Flag para indicar a configuração inicial do tabuleiro
 
     const createBoard = () => {
@@ -41,17 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
             board.appendChild(cell);
         }
 
-        // Adicionar eventos de drag and drop
+        // Adicionar eventos de clique
         document.querySelectorAll('.cell').forEach(cell => {
-            cell.addEventListener('dragover', (e) => {
-                e.preventDefault();
-            });
-
-            cell.addEventListener('drop', (e) => {
-                if (draggedPiece) {
-                    const player = parseInt(draggedPiece.dataset.player, 10);
+            cell.addEventListener('click', () => {
+                if (selectedPiece) {
+                    const player = parseInt(selectedPiece.dataset.player, 10);
                     const cellIndex = parseInt(cell.dataset.index, 10);
-                    const pieceNumber = parseInt(draggedPiece.dataset.number, 10);
+                    const pieceNumber = parseInt(selectedPiece.dataset.number, 10);
 
                     // Verificar se é a configuração inicial ou a fase de movimentação
                     if (isInitialSetup) {
@@ -59,7 +55,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         const validCell = (player === 1 && cellIndex < 10) || (player === 2 && cellIndex >= 20);
                         
                         if (validCell) {
-                            cell.appendChild(draggedPiece);
+                            cell.appendChild(selectedPiece);
+                            selectedPiece = null;
                             // Alternar a vez do jogador
                             currentPlayer = currentPlayer === 1 ? 2 : 1;
                             updatePlayerTurnIndicator();
@@ -90,9 +87,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         }
 
-                        const validMove = isValidMove(draggedPiece, cell);
+                        const validMove = isValidMove(selectedPiece, cell);
                         if (validMove) {
-                            cell.appendChild(draggedPiece);
+                            cell.appendChild(selectedPiece);
+                            selectedPiece = null;
                             currentPlayer = currentPlayer === 1 ? 2 : 1;
                             updatePlayerTurnIndicator();
                         } else {
@@ -115,9 +113,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const pieceElement = document.createElement('div');
             pieceElement.classList.add('piece', `player${piece.player}`);
             pieceElement.textContent = piece.number;
-            pieceElement.draggable = true;
             pieceElement.dataset.player = piece.player;
             pieceElement.dataset.number = piece.number;
+            pieceElement.addEventListener('click', () => {
+                if (isInitialSetup || piece.player === currentPlayer) {
+                    selectedPiece = pieceElement;
+                } else {
+                    alert("Não é sua vez!");
+                }
+            });
             piecesContainer.appendChild(pieceElement);
         });
     };
@@ -147,20 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
         isInitialSetup = true;
         statusMessage.textContent = '';
     };
-
-    document.addEventListener('dragstart', (e) => {
-        if (e.target.classList.contains('piece')) {
-            draggedPiece = e.target;
-            e.target.classList.add('dragging');
-        }
-    });
-
-    document.addEventListener('dragend', (e) => {
-        if (e.target.classList.contains('piece')) {
-            e.target.classList.remove('dragging');
-            draggedPiece = null;
-        }
-    });
 
     startGameButton.addEventListener('click', () => {
         isInitialSetup = false;
